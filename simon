@@ -1,0 +1,27 @@
+void blink(int port) {
+  digitalWrite(port, HIGH);
+  delay(500);
+  digitalWrite(port, LOW);
+  delay(500);
+}
+
+void playSequence(int sequence[], int length) {
+  for(int i=0; i < length; i++) {
+    blink(sequence[i]);
+  }
+}
+
+int leds[4] = {10, 11, 12, 13}; 
+int sequence[5] = {leds[0], leds[1], leds[2], leds[3], leds[0]};
+
+void setup() {
+  pinMode(leds[0], OUTPUT);
+  pinMode(leds[1], OUTPUT);
+  pinMode(leds[2], OUTPUT);
+  pinMode(leds[3], OUTPUT);
+}
+
+void loop() {
+  playSequence(sequence, 5);
+  delay(1000);
+}
