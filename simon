@@ -12,7 +12,6 @@ void playSequence(int sequence[], int length) {
 }
 
 int leds[4] = {10, 11, 12, 13}; 
-int sequence[5] = {leds[0], leds[1], leds[2], leds[3], leds[0]};
 
 void setup() {
   pinMode(leds[0], OUTPUT);
@@ -22,6 +21,13 @@ void setup() {
 }
 
 void loop() {
-  playSequence(sequence, 5);
-  delay(1000);
+  int maxScore = 5;
+//  int sequence = generateSequence(maxScore);
+  int sequence[5] = {leds[0], leds[1], leds[2], leds[3], leds[0]};
+  int stage = 1;
+  while(stage < maxScore) {
+    playSequence(sequence, stage);
+    delay(1000);
+    stage++;
+  }
 }
