@@ -12,8 +12,8 @@ void playSequence(int sequence[], int length) {
 }
 
 int leds[4] = {10, 11, 12, 13};
-int maxScore = 20;
-int sequence[20];
+int maxScore = 5;
+int sequence[5];
 
 void fillSequence() {
   for(int i = 0; i < maxScore; i++) {
@@ -31,7 +31,7 @@ void setup() {
 void loop() {
   int stage = 1;
   fillSequence();
-  while(stage < maxScore) {
+  while(stage <= maxScore) {
     playSequence(sequence, stage);
     delay(1000);
     stage++;
