@@ -18,14 +18,13 @@ void setup() {
   pinMode(leds[1], OUTPUT);
   pinMode(leds[2], OUTPUT);
   pinMode(leds[3], OUTPUT);
-   int maxScore = 5;
-//  int sequence = generateSequence(maxScore);
-  int sequence[5] = {leds[0], leds[1], leds[2], leds[3], leds[0]};
-  int stage = 1;
 }
 
 void loop() {
-  stage = 1;
+  int maxScore = 5;
+//  int sequence = generateSequence(maxScore);
+  int sequence[5] = {leds[0], leds[1], leds[2], leds[3], leds[0]};
+  int stage = 1;
   while(stage < maxScore) {
     playSequence(sequence, stage);
     delay(1000);
