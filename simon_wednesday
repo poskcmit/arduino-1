@@ -1,0 +1,44 @@
+void blink(int port) {
+  digitalWrite(port, HIGH);
+  delay(500);
+  digitalWrite(port, LOW);
+  delay(500);
+}
+
+void playSequence(int sequence[], int length) {
+  for(int i=0; i < length; i++) {
+    blink(sequence[i]);
+  }
+}
+
+int leds[4] = {10, 11, 12, 13};
+int maxScore = 5;
+int sequence[5];
+
+void fillSequence() {
+  for(int i = 0; i < maxScore; i++) {
+    sequence[i] = leds[random(0, 4)];
+  }
+}
+
+void setup() {
+  pinMode(leds[0], OUTPUT);
+  pinMode(leds[1], OUTPUT);
+  pinMode(leds[2], OUTPUT);
+  pinMode(leds[3], OUTPUT);
+}
+
+void loop() {
+  int stage = 1;
+  fillSequence();
+  while(stage <= maxScore) {
+    playSequence(sequence, stage);
+    delay(1000);
+    bool isCorrect = readSequence(sequence, stage);
+    if(isCorrect) stage++;
+    else {
+      //3 раза мигнуть всеми светодиодами, типа програл
+      break();
+    }
+  }
+}
