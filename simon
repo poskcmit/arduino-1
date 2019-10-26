@@ -1,23 +1,29 @@
-void blink(int port) {
-  digitalWrite(port, HIGH);
-  delay(500);
-  digitalWrite(port, LOW);
-  delay(500);
-}
-
-void playSequence(int sequence[], int length) {
+void playSequence(int sequence[], int length, int leds[]) {
   for(int i=0; i < length; i++) {
-    blink(sequence[i]);
+    blink(leds[ sequence[i] ]);
   }
 }
 
+bool readSequence(int sequence[], int stage, int buttons[] ) {
+  int flag = 4;
+  while(flag == 4) {
+    if( !digitalRead(buttons[0]) ) flag = 0;
+    if( !digitalRead(buttons[1]) ) flag = 1;
+    if( !digitalRead(buttons[2]) ) flag = 2;
+    if( !digitalRead(buttons[3]) ) flag = 3;
+  }
+  if( sequence[0] == flag) return true;
+  else return false;
+}
+
 int leds[4] = {10, 11, 12, 13};
+int buttons[4] = {1, 2, 3, 4};
 int maxScore = 5;
 int sequence[5];
 
 void fillSequence() {
   for(int i = 0; i < maxScore; i++) {
-    sequence[i] = leds[random(0, 4)];
+    sequence[i] = random(0, 4);
   }
 }
 
@@ -26,14 +32,26 @@ void setup() {
   pinMode(leds[1], OUTPUT);
   pinMode(leds[2], OUTPUT);
   pinMode(leds[3], OUTPUT);
+  pinMode(buttons[0], INPUT_PULLUP);
+  pinMode(buttons[1], INPUT_PULLUP);
+  pinMode(buttons[2], INPUT_PULLUP);
+  pinMode(buttons[3], INPUT_PULLUP);
+  randomSeed(analogRead(0));
 }
 
 void loop() {
+  start:
   int stage = 1;
   fillSequence();
   while(stage <= maxScore) {
-    playSequence(sequence, stage);
+    playSequence(sequence, stage, leds);
     delay(1000);
+    bool isCorrect = readSequence(sequence, stage, buttons);
+    if(isCorrect) {stage++;}
+    else {
+      //3 раза мигнуть всеми светодиодами, типа проиграл
+      goto start;
+    }
     stage++;
   }
 }
