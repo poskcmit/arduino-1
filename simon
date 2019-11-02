@@ -1,3 +1,19 @@
+void fail(int leds[]) {
+  for(int i=0; i < 3; i++)
+  {
+  digitalWrite(leds[0], HIGH);
+  digitalWrite(leds[1], HIGH);
+  digitalWrite(leds[2], HIGH);
+  digitalWrite(leds[3], HIGH);
+  delay(250);
+  digitalWrite(leds[0], LOW);
+  digitalWrite(leds[1], LOW);
+  digitalWrite(leds[2], LOW);
+  digitalWrite(leds[3], LOW);
+  delay(250);
+  }
+}
+
 void blink(int port) {
   digitalWrite(port, HIGH);
   delay(500);
@@ -12,30 +28,51 @@ void playSequence(int sequence[], int length, int leds[]) {
   }
 }
 
-bool readSequence(int sequence[], int stage, int buttons[] ) {
-  int flag = 4;
-  while(flag == 4) {
-    if( !digitalRead(buttons[0]) ) flag = 0;
-    if( !digitalRead(buttons[1]) ) flag = 1;
-    if( !digitalRead(buttons[2]) ) flag = 2;
-    if( !digitalRead(buttons[3]) ) flag = 3;
+bool readSequence(int sequence[], int stage, int buttons[], int leds[] ) 
+{
+  Serial.print(stage);
+  Serial.println(" nomer raunda");
+  for (int i=0; i < stage; i++)
+  {
+    int flag = 4; 
+     while(flag == 4) {
+//      Serial.print(flag);
+//      Serial.println(" tut");
+      if( !digitalRead(buttons[0]) ) {flag = 0; Serial.println("buttons0");while(!digitalRead(buttons[flag]) ) {};}
+      if( !digitalRead(buttons[1]) ) {flag = 1; Serial.println("buttons1");while(!digitalRead(buttons[flag]) ) {};}
+      if( !digitalRead(buttons[2]) ) {flag = 2; Serial.println("buttons2");while(!digitalRead(buttons[flag]) ) {};}
+      if( !digitalRead(buttons[3]) ) {flag = 3; Serial.println("buttons3");while(!digitalRead(buttons[flag]) ) {};}
+      if(flag != 4)
+      {
+      digitalWrite(leds[flag], HIGH);
+      delay(200);
+      digitalWrite(leds[flag], LOW);
+      }
+//      if(flag != 4)
+//        {
+//         delay(150);
+////       while(!digitalRead(buttons[flag]) ) {};
+//        }
+    }
+     Serial.println(sequence[i]);
+     if( sequence[i] != flag) return false;
   }
-  if( sequence[0] == flag) return true;
-  else return false;
+  return true;
 }
 
 int leds[4] = {10, 11, 12, 13};
-int buttons[4] = {1, 2, 3, 4};
-int maxScore = 5;
-int sequence[5];
+int buttons[4] = {9, 6, 5, 3};
+int maxScore = 10;
+int sequence[10]; //makss chislo raundov
 
-void fillSequence() {
+void fillSequence() { //zapolnenie globalnoy peremennoy
   for(int i = 0; i < maxScore; i++) {
     sequence[i] = random(0, 4);
   }
 }
 
 void setup() {
+  Serial.begin(9600);
   pinMode(leds[0], OUTPUT);
   pinMode(leds[1], OUTPUT);
   pinMode(leds[2], OUTPUT);
@@ -44,20 +81,31 @@ void setup() {
   pinMode(buttons[1], INPUT_PULLUP);
   pinMode(buttons[2], INPUT_PULLUP);
   pinMode(buttons[3], INPUT_PULLUP);
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(0)); //чтобы нормально работал рандом
 }
 
 void loop() {
   start:
-  int stage = 1;
-  fillSequence();
+  int stage = 1;//nachalo raunda tipa gde mi
+  fillSequence(); //юзает глобальную переменную sequence
   while(stage <= maxScore) {
     playSequence(sequence, stage, leds);
-    delay(1000);
-    bool isCorrect = readSequence(sequence, stage, buttons);
-    if(isCorrect) {stage++;}
+    //delay(1000);
+    bool isCorrect = readSequence(sequence, stage, buttons, leds);
+    if(isCorrect) {
+      Serial.println("ugadal");
+    }
     else {
       //3 раза мигнуть всеми светодиодами, типа проиграл
+      //goto start;
+      fail(leds);
+      Serial.println("ne ugadal");
+      goto start;
+    }
+    delay(1000);
+    if(stage == maxScore)
+    {
+      congratulation(leds[]);
       goto start;
     }
     stage++;
