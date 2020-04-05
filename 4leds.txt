@@ -1,0 +1,49 @@
+void setup()
+{
+  pinMode(3, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
+  pinMode(6, INPUT_PULLUP);
+  pinMode(9, INPUT_PULLUP);
+  pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+}
+
+void loop()
+{
+  if (digitalRead(3) == LOW) {
+    // первый режим
+      digitalWrite(13, HIGH);
+      digitalWrite(11, LOW);
+      digitalWrite(10, LOW);
+      digitalWrite(12, LOW);
+      delay(500);
+  }
+  if (digitalRead(5) == LOW) {
+      // второй режим
+      digitalWrite(13, LOW);
+      digitalWrite(11, HIGH);
+      digitalWrite(10, LOW);
+      digitalWrite(12, LOW);
+      delay(500);
+  }
+  if (digitalRead(6) == LOW) {
+    // третий режим
+    digitalWrite(13, LOW);
+    digitalWrite(11, LOW);
+    digitalWrite(10, HIGH);
+    digitalWrite(12, LOW);
+    delay(500);
+  }
+  if (digitalRead(9) == LOW) {
+    // четвертый режим
+    digitalWrite(13, LOW);
+    digitalWrite(11, LOW);
+    digitalWrite(10, LOW);
+    digitalWrite(12, HIGH);
+    delay(500);
+  }
+}
+
+https://www.tinkercad.com/things/i13RM9ciFs0-sizzling-densor/editel
