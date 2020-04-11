@@ -1,0 +1,28 @@
+int joystick;
+
+int matchU(int u) {
+  if (u > 900) {
+    return 2;
+  } else if (u > 800) {
+    return 3;
+  } else {
+    return 4;
+  }
+}
+
+
+void setup() {
+  for (int i = 2; i <= 12; i++) {
+    pinMode(i, OUTPUT);
+  }
+}
+
+void loop() {
+  joystick = analogRead(A0);
+  int led = matchU(joystick);
+  digitalWrite(led, HIGH);
+  delay(10);
+  digitalWrite(led, LOW);
+}
+
+https://www.tinkercad.com/things/ji20WiXwlSy-joystick
