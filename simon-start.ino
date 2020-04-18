@@ -1,44 +1,39 @@
-int buttonRed = 2;
-int buttonBlue = 3;
-int buttonYellow = 4;
-int buttonGreen = 5;
+int buttons[4] = {2, 3, 4, 5};
+int leds[4] = {8, 9, 10, 11};
 
-int ledRed = 8;
-int ledBlue = 9;
-int ledYellow = 10;
-int ledGreen = 11;
+int sequence[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+void mutateSequence() {
+  for (int i = 0; i < 10; i++) {
+    sequence[i] = random(0, 4);
+  }
+}
 
 void setup() {
-  for (int i = 2; i <=5; ++i) {
-    pinMode(i, INPUT_PULLUP);
+  randomSeed(analogRead(0));
+  for (int i = 0; i < 4; ++i) {
+    pinMode(buttons[i], INPUT_PULLUP);
   }
-  for (int i = 8; i <=11; ++i) {
-    pinMode(i, OUTPUT);
+  for (int i = 0; i < 4; ++i) {
+    pinMode(leds[i], OUTPUT);
   }
 }
 
 void loop() {
-  if (digitalRead(buttonGreen) == LOW) {
-    digitalWrite(ledGreen, HIGH);
-  } else {
-    digitalWrite(ledGreen, LOW);
-  }
+  //for (int i = 0; i < 4; ++i) {
+  //  if (digitalRead(buttons[i]) == LOW) {
+  //    digitalWrite(leds[i], HIGH);
+  //  } else {
+  //    digitalWrite(leds[i], LOW);
+  //  }
+  //}
   
-  if (digitalRead(buttonRed) == LOW) {
-    digitalWrite(ledRed, HIGH);
-  } else {
-    digitalWrite(ledRed, LOW);
+  for (int i = 0; i < 10; ++i) {
+    digitalWrite(leds[sequence[i]], HIGH);
+    delay(200);
+    digitalWrite(leds[sequence[i]], LOW);
+    delay(200);
   }
-  
-  if (digitalRead(buttonBlue) == LOW) {
-    digitalWrite(ledBlue, HIGH);
-  } else {
-    digitalWrite(ledBlue, LOW);
-  }
-  
-  if (digitalRead(buttonYellow) == LOW) {
-    digitalWrite(ledYellow, HIGH);
-  } else {
-    digitalWrite(ledYellow, LOW);
-  }
+  mutateSequence();
+  delay(3000);
 }
